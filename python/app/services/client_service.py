@@ -1,5 +1,6 @@
 from app import db
 from app.models.client import ClientDummy
+from app.models.log import ApiLog
 from app.utils.logger import log_api
 from flask import jsonify
 
@@ -11,6 +12,11 @@ def add_client(data):
     log_api(data, response)
     return jsonify(response), 201
 
+def get_logs():
+    clients = ApiLog.query.all()
+    result = [{'api_id': c.api_id, 'request_payloads': c.request_payloads, 'response_payloads': c.response_payloads, 'created_time': c.created_time.strftime("%d-%m-%Y %H:%M") + ":" + c.created_time.strftime("%S")[:2]} for c in clients]
+    return jsonify(result)
+    
 def get_clients():
     clients = ClientDummy.query.all()
     result = [{'id': c.id, 'nama': c.nama, 'alamat': c.alamat, 'created_time': c.created_time.strftime("%d-%m-%Y %H:%M") + ":" + c.created_time.strftime("%S")[:2]} for c in clients]

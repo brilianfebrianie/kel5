@@ -1,11 +1,12 @@
 from flask import Blueprint, request
 from flasgger import swag_from
-from app.services.client_service import add_client, get_clients, get_client_by_id, update_client, delete_client
+from app.services.client_service import get_logs, add_client, get_clients, get_client_by_id, update_client, delete_client
 
 client_bp = Blueprint('client_bp', __name__)
 
 @client_bp.route('/clients', methods=['POST'])
 @swag_from({
+    'tags': ['CRUD table client_dummy'],
     'parameters': [
         {
             'name': 'body',
@@ -29,6 +30,7 @@ def create_client():
 
 @client_bp.route('/clients', methods=['GET'])
 @swag_from({
+    'tags': ['CRUD table client_dummy'],
     'responses': {
         200: {
             'description': 'List of clients',
@@ -50,8 +52,33 @@ def create_client():
 def fetch_clients():
     return get_clients()
 
-@client_bp.route('/client', methods=['GET'])
+@client_bp.route('/apilogs', methods=['GET'])
 @swag_from({
+    'tags': ['Mengambil data table api_logs'],
+    'responses': {
+        200: {
+            'description': 'List of apilogs',
+            'schema': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'api_id': {'type': 'string', 'format': 'uuid'},
+                        'request_payloads': {'type': 'json'},
+                        'responnse_payloads': {'type': 'json'},
+                        'created_time': {'type': 'string', 'format': 'date-time'}
+                    }
+                }
+            }
+        }
+    }
+})
+def fetch_api():
+    return get_logs()
+
+@client_bp.route('/client/<int:uuid>', methods=['GET'])
+@swag_from({
+    'tags': ['CRUD table client_dummy'],
     'parameters': [
         {
             'name': 'id',
@@ -86,6 +113,7 @@ def fetch_client_by_id():
 
 @client_bp.route('/clients', methods=['PUT'])
 @swag_from({
+    'tags': ['CRUD table client_dummy'],
     'parameters': [
         {
             'name': 'id',
@@ -121,6 +149,7 @@ def modify_client():
 
 @client_bp.route('/clients', methods=['DELETE'])
 @swag_from({
+    'tags': ['CRUD table client_dummy'],
     'parameters': [
         {
             'name': 'id',

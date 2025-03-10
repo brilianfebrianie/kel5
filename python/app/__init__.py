@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
+from flask_restx import Api, Resource, fields
 
 db = SQLAlchemy()
 
